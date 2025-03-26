@@ -1,7 +1,6 @@
 package io.hhplus.tdd;
 
 import io.hhplus.tdd.exceptions.NotEnoughPointException;
-import io.hhplus.tdd.exceptions.UserNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,11 +10,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @RestControllerAdvice
 class ApiControllerAdvice extends ResponseEntityExceptionHandler {
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleUserNotFound(UserNotFoundException ex) {
-        return buildErrorResponse("404", ex.getMessage(), HttpStatus.NOT_FOUND);
-    }
-
     @ExceptionHandler(NotEnoughPointException.class)
     public ResponseEntity<ErrorResponse> handleNotEnoughPoint(NotEnoughPointException ex) {
         return buildErrorResponse("400", ex.getMessage(), HttpStatus.BAD_REQUEST);

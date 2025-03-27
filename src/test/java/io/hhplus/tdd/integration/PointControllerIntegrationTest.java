@@ -1,6 +1,9 @@
 package io.hhplus.tdd.integration;
 
+import io.hhplus.tdd.config.PointProperties;
 import io.hhplus.tdd.point.*;
+import io.hhplus.tdd.validator.IdValidator;
+import io.hhplus.tdd.validator.PointValidator;
 import io.hhplus.tdd.validator.ValidationWrapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,6 +12,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -23,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(PointController.class)
+@Import({ValidationWrapper.class, IdValidator.class, PointValidator.class, PointProperties.class}) // <-- 이 부분!
 class PointControllerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
@@ -30,12 +35,9 @@ class PointControllerIntegrationTest {
     @MockBean
     private PointService pointService;
 
-    @MockBean
-    private ValidationWrapper validationWrapper;
-
     @DisplayName("getPoint: 유효한 ID 성공 검증")
     @ParameterizedTest
-    @ValueSource(longs = {1L, 100L, 10_000_000_000L})
+    @ValueSource(longs = {1L, 100L, 1_000_000_000L})
     void getPointUser_ShouldReturnUserPoint_WhenIdIsValid(long validId) throws Exception {
         // Stub 서비스 반환값 설정
         when(pointService.getPoint(validId))
@@ -50,7 +52,7 @@ class PointControllerIntegrationTest {
 
     @DisplayName("getPointUserHistory: 유효한 ID 성공 검증")
     @ParameterizedTest
-    @ValueSource(longs = {1L, 100L, 10_000_000_000L})
+    @ValueSource(longs = {1L, 100L, 1_000_000_000L})
     void getPointUserHistory_ShouldReturnListPointHistory_WhenIdIsValid(long validId) throws Exception {
         // Stub 서비스 반환값 설정
         List<PointHistory> mockHistory = List.of();
@@ -65,7 +67,7 @@ class PointControllerIntegrationTest {
 
     @DisplayName("patchPointUserCharge: 유효한 ID 성공 검증")
     @ParameterizedTest
-    @ValueSource(longs = {1L, 100L, 10_000_000_000L})
+    @ValueSource(longs = {1L, 100L, 1_000_000_000L})
     void patchPointUserCharge_ShouldReturnUserPoint_WhenIdIsValid(long validId) throws Exception {
         // Stub 서비스 반환값 설정
         when(pointService.chargeUserPoint(validId, 1L))
@@ -104,7 +106,7 @@ class PointControllerIntegrationTest {
 
     @DisplayName("patchPointUserUse: 유효한 ID 성공 검증")
     @ParameterizedTest
-    @ValueSource(longs = {1L, 100L, 10_000_000_000L})
+    @ValueSource(longs = {1L, 100L, 1_000_000_000L})
     void patchPointUserUse_ShouldReturnUserPoint_WhenIdIsValid(long validId) throws Exception {
         // Mock 서비스 반환값 설정
         when(pointService.useUserPoint(validId, 500L))

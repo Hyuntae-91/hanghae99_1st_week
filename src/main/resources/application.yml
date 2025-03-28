@@ -1,0 +1,5 @@
+spring:
+  application.name: hhplus-tdd
+point:
+  max-id: 1000000000 # id 최대 10억 까지만 허용
+  max-amount: 10000000000  # 100억 최대 포인트 제한
